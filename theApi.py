@@ -12,16 +12,17 @@ db_config = {
     'database': 'my_database'
 }
 
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="user",
-    password="userpassword",
-    database="my_database"
-)
+
 
 def get_db_connection():
     """Function to get a database connection."""
     try:
+        mydb = mysql.connector.connect(
+                host="localhost",
+                user="user",
+                password="userpassword",
+                database="my_database"
+            )
         connection = mydb
         return connection
     except Error as e:
@@ -39,7 +40,7 @@ def get_last_10_records():
 
     try:
         # Adjust 'table_name' to your specific table name
-        query = "SELECT * FROM transactions ORDER BY ID DESC LIMIT 10"
+        query = "SELECT * FROM transactions"
         cursor.execute(query)
         records = cursor.fetchall()
 

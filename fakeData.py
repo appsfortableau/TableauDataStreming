@@ -2,29 +2,27 @@ import pandas as pd
 import numpy as np
 from faker import Faker
 import random
+import time
 import mysql.connector
 
 
-# Initialize Faker for generating synthetic data
 fake = Faker()
 
-# Parameters for dataset generation
-num_transactions = 1000
+num_transactions = 100000
 num_products = 50
 regions = ['North America', 'Europe', 'Asia', 'South America', 'Africa']
 states = ['New York', 'California', 'Texas', 'Florida', 'Ohio', 'North Carolina', 'Michigan', 'Washington', 'Arizona', 'Georgia', 'Tennessee', 'Indiana', 'Massachusetts', 'Missouri', 'Maryland', 'Wisconsin', 'Colorado', 'Minnesota', 'South Carolina', 'Alabama', 'Louisiana', 'Kentucky', 'Oregon', 'Oklahoma', 'Connecticut', 'Iowa', 'Mississippi', 'Arkansas', 'Utah', 'Nevada', 'Kansas', 'New Mexico', 'Nebraska', 'West Virginia', 'Idaho', 'Hawaii', 'Maine', 'New Hampshire', 'Montana', 'Rhode Island', 'Delaware', 'South Dakota', 'North Dakota', 'Alaska', 'Vermont', 'Wyoming']
 
-# Generate Product Data
 product_ids = [f'P{str(i).zfill(4)}' for i in range(1, num_products + 1)]
 products = [{'Product ID': pid, 'Product Name': fake.word(), 'Category': fake.word()} for pid in product_ids]
 
-# Generate Transactions Data
 transactions = []
 id = 0
+date_range = ''
 for _ in range(num_transactions):
     id = id + 1
     transaction_id = fake.uuid4()
-    timestamp = fake.date_time_this_year()
+    timestamp = fake.date_time_this_year() 
     product = random.choice(products)
     product_id = product['Product ID']
     quantity = random.randint(1, 10)
@@ -99,6 +97,8 @@ for i in range(batch_count):
     mycursor.executemany(sql, values)
     mydb.commit()
     print(mycursor.rowcount, "records inserted.")
+
+    time.sleep(5)
 
 
 
