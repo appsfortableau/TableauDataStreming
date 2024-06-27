@@ -1,0 +1,30 @@
+import pandas as pd
+import requests
+
+# Initialize an empty DataFrame with desired columns
+existing_df = pd.DataFrame(columns=['ID', 'ProductID', 'Quantity', 'UnitPrice', 'TotalAmount', 'State'])
+
+# API endpoint to fetch last 10 records
+api_url = 'http://localhost:3308/api/last-10-records'
+
+# Fetch data from the API
+response = requests.get(api_url)
+print(response)
+if response.status_code == 200:
+    # Convert API response to DataFrame
+    api_data = response.json()
+    new_df = pd.DataFrame(api_data)
+
+    # Append new data to existing DataFrame
+    combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+    
+    # Optionally, you can sort the DataFrame by 'ID' or any other column
+    combined_df.sort_values(by='ID', ascending=False, inplace=True)
+
+    # Display the combined DataFrame
+    print(combined_df.head(10))  # Display the first 10 rows after combining
+
+    # If you want to update the existing_df with the combined data, you can do:
+    existing_df = combined_df.copy()
+
+return existing_df.to_dict(orient='list')

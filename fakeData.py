@@ -11,18 +11,20 @@ fake = Faker()
 num_transactions = 100000
 num_products = 50
 regions = ['North America', 'Europe', 'Asia', 'South America', 'Africa']
-states = ['New York', 'California', 'Texas', 'Florida', 'Ohio', 'North Carolina', 'Michigan', 'Washington', 'Arizona', 'Georgia', 'Tennessee', 'Indiana', 'Massachusetts', 'Missouri', 'Maryland', 'Wisconsin', 'Colorado', 'Minnesota', 'South Carolina', 'Alabama', 'Louisiana', 'Kentucky', 'Oregon', 'Oklahoma', 'Connecticut', 'Iowa', 'Mississippi', 'Arkansas', 'Utah', 'Nevada', 'Kansas', 'New Mexico', 'Nebraska', 'West Virginia', 'Idaho', 'Hawaii', 'Maine', 'New Hampshire', 'Montana', 'Rhode Island', 'Delaware', 'South Dakota', 'North Dakota', 'Alaska', 'Vermont', 'Wyoming']
-
+states = ['New York', 'California', 'Texas', 'Florida', 'Ohio', 'North Carolina', 'Michigan', 'Washington', 'Arizona', 'Georgia', 'Tennessee', 'Indiana', 'Massachusetts', 'Missouri', 'Maryland', 'Wisconsin', 'Colorado', 'Minnesota', 'South Carolina', 'Alabama', 'Louisiana', 'Kentucky', 'Oregon', 'Oklahoma', 'Connecticut', 'Iowa', 'Mississippi', 'Arkansas', 'Utah', 'Nevada', 'Kansas', 'New Mexico', 'Nebraska', 'West Virginia', 'Idaho', 'Maine', 'New Hampshire', 'Montana', 'Rhode Island', 'Delaware', 'South Dakota', 'North Dakota', 'Vermont', 'Wyoming']
+date_range = pd.date_range(start='1/1/2015', end='12/31/2024', freq='D')
+start_date = date_range[0]  
+last_used_date = start_date
 product_ids = [f'P{str(i).zfill(4)}' for i in range(1, num_products + 1)]
 products = [{'Product ID': pid, 'Product Name': fake.word(), 'Category': fake.word()} for pid in product_ids]
 
 transactions = []
 id = 0
-date_range = ''
 for _ in range(num_transactions):
     id = id + 1
     transaction_id = fake.uuid4()
-    timestamp = fake.date_time_this_year() 
+    timestamp = last_used_date + pd.DateOffset(seconds=random.randint(0, 86400))
+    last_used_date = timestamp
     product = random.choice(products)
     product_id = product['Product ID']
     quantity = random.randint(1, 10)
@@ -79,7 +81,7 @@ else:
     print(f"Table {tableName} created")
 
 # insert data into the table
-batch_size = 1000
+batch_size = 100
 batch_count = len(transactions_df) // batch_size
 
 for i in range(batch_count):
