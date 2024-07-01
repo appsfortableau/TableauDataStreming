@@ -3,8 +3,8 @@ import numpy as np
 from faker import Faker
 import random
 import time
-import mysql.connector
 
+import mysql.connector
 
 fake = Faker()
 
@@ -27,10 +27,17 @@ for _ in range(num_transactions):
     last_used_date = timestamp
     product = random.choice(products)
     product_id = product['Product ID']
-    quantity = random.randint(1, 10)
-    unit_price = round(random.uniform(5.0, 100.0), 2)
+    
+    # Simulate decr amount for a period
+    if timestamp < start_date + pd.DateOffset(days=30):
+        quantity = random.randint(1, 5)
+        unit_price = round(random.uniform(5.0, 100.0), 2)
+    else:
+        # Simulate increasing quttiity
+        quantity = random.randint(5, 10)
+        unit_price = round(random.uniform(5.0, 100.0), 2)
+    
     total_amount = round(quantity * unit_price, 2)
-    # region = random.choice(regions)
     state = random.choice(states)
     
     transactions.append({
@@ -80,7 +87,7 @@ else:
     mydb.commit()
     print(f"Table {tableName} created")
 
-# insert data into the table
+# insert data into the table batch size 
 batch_size = 100
 batch_count = len(transactions_df) // batch_size
 
