@@ -10,12 +10,10 @@ db_config = {
     'password': 'userpassword',
     'database': 'my_database'
 }
-
 return_data_num = 10
 
 last_checked_data = None
 
-# add a new endpoint to set the number of records to return
 @app.route('/api/set-return-num/<int:num>', methods=['GET'])
 def set_return_num(num):
     global return_data_num
@@ -24,9 +22,6 @@ def set_return_num(num):
 
 @app.route('/api/should-reload', methods=['GET'])
 def test_should_reload():
-    # test if the database has new records compared to the last time the data was fetched  and stored in last_checked_data
-    # if there are new records, return True, else return False
-    # if last_checked_data is None, return True
 
     global last_checked_data
     connection = get_db_connection()

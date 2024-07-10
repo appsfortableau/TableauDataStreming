@@ -32,7 +32,7 @@
 
         const fetchApi = async () => {
           try {
-            const response = await fetch("http://127.0.0.1:3308/api/should-reload", { mode: "cors" });
+            const response = await fetch("#your api here", { mode: "cors" });
             const data = await response.json();
             console.log("Hello from data", data);
             return data;
@@ -42,26 +42,6 @@
           }
         };
         console.log("Hello from fetchApi", fetchApi());
-        //refresh the data source every 2 seconds if there is new data and fetchData.reload is true
-        // setInterval(() => {
-        //   fetchApi().then((data) => {
-        //     if (data.reload) {
-        //       window.tableau.extensions.initializeAsync({ configure: null }).then(function () {
-        //         console.log("Hello");
-        //         const workSheet = tableau.extensions.dashboardContent.dashboard.worksheets[0];
-        //         workSheet.getDataSourcesAsync().then((datasources) => {
-        //           console.log(datasources);
-        //           //refresh the data source
-        //           datasources[0].refreshAsync().then(() => {
-        //             console.log("Data source refreshed");
-        //           });
-        //         });
-        //       });
-        //     }
-        //   });
-        // }, 1000);
-        // keep checking for new data
-
         //if parameter changed then get the parameter value
 
         window.tableau.extensions.initializeAsync({ configure: null }).then(function () {
